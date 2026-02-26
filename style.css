@@ -1,0 +1,34 @@
+  body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #calendar {
+            max-width: 800px;
+            margin: auto;
+        }
+        #calendar-header {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+        #calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+        .day {
+            border: 1px solid #ccc;
+            padding: 5px;
+            min-height: 80px;
+            font-size: 14px;
+            text-align: left;
+        }
+        .game {
+            font-size: 12px;
+            margin-top: 5px;
+            padding: 2px;
+            border-radius: 4px;
+        }
+        .empty {
+            background-color: #f9f9f9;
+        }
