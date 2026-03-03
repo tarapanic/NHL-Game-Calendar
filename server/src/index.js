@@ -45,8 +45,8 @@ const __dirname = path.dirname(__filename);
 // serve the built React app
 app.use(express.static(path.join(__dirname, "../../client/dist")));
 
-// SPA fallback (so refresh works)
-app.get("*", (req, res) => {
+// don’t swallow /api routes
+app.get(/^\/(?!api).*/, (req, res) => {
   res.sendFile(path.join(__dirname, "../../client/dist/index.html"));
 });
 
