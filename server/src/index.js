@@ -5,12 +5,20 @@ import { pool } from "./db/pool.js";
 import seasonsRouter from "./routes/seasons.js";
 import gamesRouter from "./routes/games.js";
 import teamsRouter from "./routes/teams.js";
+import path from "path";
+import { fileURLToPath } from "url";
 
 dotenv.config();
 
 const app = express();
 
-app.use(cors({ origin: "http://localhost:5173" }));
+// CORS: allow localhost in dev, and allow Render / others in production
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN || true, // true = allow all
+  })
+);
+
 app.use(express.json());
 app.use("/api/seasons", seasonsRouter);
 app.use("/api/games", gamesRouter);
@@ -31,15 +39,6 @@ app.get("/db-test", async (req, res) => {
   }
 });
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
-
-import path from "path";
-import { fileURLToPath } from "url";
-import express from "express";
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -49,4 +48,9 @@ app.use(express.static(path.join(__dirname, "../../client/dist")));
 // SPA fallback (so refresh works)
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../../client/dist/index.html"));
+});
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });
