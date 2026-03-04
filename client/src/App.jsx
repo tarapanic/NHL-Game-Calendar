@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { getSeasons, getGames, getGameById, getTeams } from "./api";
+import { getSeasons, getGames, getGameById, getTeams, getMonths } from "./api";
 import MonthGrid from "./components/MonthGrid";
 import GameModal from "./components/GameModal";
 
@@ -71,6 +71,7 @@ export default function App() {
 
   const [teams, setTeams] = useState([]);
   const [teamId, setTeamId] = useState("");
+  const [availableMonths, setAvailableMonths] = useState([]);
 
   // pick the current season object
   const selectedSeason = useMemo(
@@ -90,7 +91,8 @@ export default function App() {
   return t?.abbrev || "";
   }, [teams, teamId]);
 
-const MONTHS = [10, 11, 12, 1, 2, 3, 4, 5, 6, 7]; // including playoffs till july
+
+const MONTHS = availableMonths.length ? availableMonths : [10, 11, 12, 1, 2, 3, 4, 5, 6]; // including playoffs till july
 
 const canPrev = month !== MONTHS[0];          // not october
 const canNext = month !== MONTHS[MONTHS.length - 1]; // not july
@@ -165,6 +167,25 @@ const canNext = month !== MONTHS[MONTHS.length - 1]; // not july
   }
   loadTeams();
 }, []);
+
+useEffect(() => {
+  if (!seasonId || !teamId) return;
+
+  async function loadMonths() {
+    try {
+      const data = await getMonths({ seasonId, teamId });
+      setAvailableMonths(data);
+
+      // if current month isn't available, jump to the first available month
+      setMonth((curr) => (data.length && !data.includes(curr) ? data[0] : curr));
+    } catch (e) {
+      console.error(e);
+      setAvailableMonths([]); // fallback
+    }
+  }
+
+  loadMonths();
+}, [seasonId, teamId]);
   
 return (
       <div

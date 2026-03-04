@@ -5,6 +5,7 @@ import { pool } from "./db/pool.js";
 import seasonsRouter from "./routes/seasons.js";
 import gamesRouter from "./routes/games.js";
 import teamsRouter from "./routes/teams.js";
+import monthsRouter from "./routes/months.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -23,6 +24,7 @@ app.use(express.json());
 app.use("/api/seasons", seasonsRouter);
 app.use("/api/games", gamesRouter);
 app.use("/api/teams", teamsRouter);
+app.use("/api/months", monthsRouter);
 
 app.get("/health", (req, res) => {
   res.json({ status: "API running" });
