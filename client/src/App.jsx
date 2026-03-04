@@ -10,6 +10,9 @@ function monthFullName(m) {
       2: "February",
       3: "March",
       4: "April",
+      5: "May",
+      6: "June",
+      7: "July",
       10: "October",
       11: "November",
       12: "December",
@@ -87,10 +90,10 @@ export default function App() {
   return t?.abbrev || "";
   }, [teams, teamId]);
 
-const MONTHS = [10, 11, 12, 1, 2, 3, 4];
+const MONTHS = [10, 11, 12, 1, 2, 3, 4, 5, 6, 7]; // including playoffs till july
 
-const canPrev = month !== MONTHS[0];          // not October
-const canNext = month !== MONTHS[MONTHS.length - 1]; // not April
+const canPrev = month !== MONTHS[0];          // not october
+const canNext = month !== MONTHS[MONTHS.length - 1]; // not july
 
   function goPrevMonth() {
   setMonth((m) => {
