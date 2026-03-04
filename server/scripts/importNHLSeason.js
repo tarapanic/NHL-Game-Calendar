@@ -18,8 +18,8 @@ function seasonStartYear(label) {
 
 async function ensureSeason(label) {
   const startY = seasonStartYear(label);
-  const start_date = `${startY}-10-01`;
-  const end_date = `${startY + 1}-04-30`;
+  const start_date = `${startY}-10-01`; // preseason begins in october
+  const end_date = `${startY + 1}-07-31`; // playoffs in 2020 went till july, usually end in june
 
   const existing = await pool.query("SELECT id FROM seasons WHERE label=$1", [label]);
   if (existing.rows[0]) return existing.rows[0].id;
