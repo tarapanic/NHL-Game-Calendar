@@ -3,9 +3,14 @@ import { pool } from "../src/db/pool.js";
 
 const BASE = "https://api-web.nhle.com/v1";
 
-// NHL uses an 8-digit season code like 20252026
-const SEASON_LABEL = "2025-2026";
-const SEASON_CODE = "20252026";
+// NHL season codes
+const SEASON_LABEL = process.argv[2]; // e.g. "2024-2025"
+const SEASON_CODE  = process.argv[3]; // e.g. "20242025"
+
+if (!SEASON_LABEL || !SEASON_CODE) {
+  console.error("Usage: node scripts/importNHLSeason.js <SEASON_LABEL> <SEASON_CODE>");
+  process.exit(1);
+}
 
 function seasonStartYear(label) {
   return Number(String(label).slice(0, 4));
