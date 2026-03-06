@@ -92,7 +92,7 @@ export default function GameModal({ game, onClose }) {
 
         <div style={{ marginTop: 14, display: "grid", gap: 10 }}>
           <InfoRow label="Venue" value={game.venue || "TBD"} />
-          <InfoRow label="Status" value={game.status || "scheduled"} />
+          <InfoRow label="Game Time" value={formatLocalTime(game.game_date, game.start_time)} />
         </div>
 
         <div style={{ marginTop: 16, display: "flex", justifyContent: "end" }}>
