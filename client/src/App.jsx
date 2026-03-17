@@ -59,7 +59,12 @@ function calcYearFromSeason(seasonLabel, month) {
 export default function App() {
   const [seasons, setSeasons] = useState([]);
   const [seasonId, setSeasonId] = useState("");
-  const [month, setMonth] = useState(10); // start at October
+  
+  const [month, setMonth] = useState(() => { // start in the current month
+    const m = new Date().getMonth() + 1;
+    const validMonths = [10, 11, 12, 1, 2, 3, 4, 5, 6, 7];
+    return validMonths.includes(m) ? m : 10;
+  });
   const [games, setGames] = useState([]);
 
   const [loadingSeasons, setLoadingSeasons] = useState(true);
