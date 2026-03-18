@@ -43,7 +43,6 @@ const selectStyle = {
   fontSize: 14,
 };
 
-
 function getSeasonStartYear(label) {
   // expects "2025-2026"
   const start = Number(String(label).slice(0, 4));
@@ -54,6 +53,18 @@ function calcYearFromSeason(seasonLabel, month) {
   const startYear = getSeasonStartYear(seasonLabel);
   // Oct-Dec => start year, Jan-Apr => start year + 1
   return month >= 10 ? startYear : startYear + 1;
+}
+
+function getCurrentSeasonLabel() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1;
+
+  if (month >= 10) {
+    return `${year}-${year + 1}`;
+  } else {
+    return `${year - 1}-${year}`;
+  }
 }
 
 export default function App() {
@@ -126,7 +137,12 @@ const canNext = month !== MONTHS[MONTHS.length - 1]; // not july
         setLoadingSeasons(true);
         const data = await getSeasons();
         setSeasons(data);
-        if (data.length > 0) setSeasonId(String(data[0].id));
+
+        if (data.length > 0) {
+          const currentLabel = getCurrentSeasonLabel();
+          const match = data.find(s => s.label === currentLabel);
+          setSeasonId(String((match || data[0]).id));
+        }
       } catch (e) {
         setError(e.message || "Failed to load seasons");
       } finally {
@@ -181,11 +197,13 @@ useEffect(() => {
       const data = await getMonths({ seasonId, teamId });
       setAvailableMonths(data);
 
-      // if current month isn't available, jump to the first available month
-      setMonth((curr) => (data.length && !data.includes(curr) ? data[0] : curr));
+      const currentMonth = new Date().getMonth() + 1;
+
+      setMonth(data.includes(currentMonth) ? currentMonth : data[0]);
+
     } catch (e) {
       console.error(e);
-      setAvailableMonths([]); // fallback
+      setAvailableMonths([]);
     }
   }
 
